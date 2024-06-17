@@ -1,0 +1,11 @@
+## R files
+Delay_Vaccination_Paper.Rproj
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+## Folders and files
+Data/*
+Temp folder/*
+*.png
