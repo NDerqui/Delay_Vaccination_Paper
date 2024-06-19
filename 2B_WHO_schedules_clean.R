@@ -563,6 +563,8 @@ rm(data, bcg, dtp, mcv, pol, hep, hib, pne, rot)
 who_data[who_data == "HepB-D0"] <- "HepB-BD"
 who_data[who_data == "OPV-D0"] <- "OPV-BD"
 
+who_data$country[who_data$country == "Gambia"] <- "The Gambia"
+
 
 #### Save ####
 
