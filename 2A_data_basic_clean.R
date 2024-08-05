@@ -68,8 +68,8 @@ for (step in 1:2) {
   var_hh_names <- c("urban", "city", "wealth", "mother_education", "mother_literacy", "married", "mother_occupation", "husband_edu", "husband_lit", "husband_ocu", "total_kids")
   var_hh_dir <- data.frame(var = var_hh, name = var_hh_names)
   
-  var_demo <- c("B1", "B2", "B4", "B5", "B8", "B19", "H1", "BORD")
-  var_demo_names <- c("dob_month", "dob_year", "sex", "alive", "age_y", "age_m", "health_card", "birth_order")
+  var_demo <- c("B1", "B2", "B17", "B4", "B5", "B8", "B19", "H1", "BORD")
+  var_demo_names <- c("dob_month", "dob_year", "dob_day", "sex", "alive", "age_y", "age_m", "health_card", "birth_order")
   var_demo_dir <- data.frame(var = var_demo, name = var_demo_names)
   
   var_vax <- c("H2", "H2D", "H2M", "H2Y",
@@ -194,6 +194,7 @@ for (step in 1:2) {
   data <- data %>%
     mutate(dob_month = as.numeric(dob_month)) %>%
     mutate(dob_year = as.numeric(dob_year)) %>%
+    mutate(dob_day = as.numeric(dob_day)) %>%
     mutate(sex = as.factor(sex)) %>%
     mutate(age_y = as.numeric(age_y)) %>%
     mutate(age_m = as.numeric(age_m)) %>%
@@ -326,7 +327,7 @@ for (step in 1:2) {
            "country", "region", "subregion", "who_region_code",
            "DHSID", "cluster_unique", "cluster", "hh_unique", "hh",
            "id", "weight",
-           "alive", "sex", "dob_month", "dob_year", "age_m", "age_y",
+           "alive", "sex", "dob_month", "dob_year", "dob_day", "age_m", "age_y",
            "health_card", "total_kids", "birth_order",
            "urban", "city", "wealth",
            "mother_education", "mother_literacy", "married", "mother_occupation",
