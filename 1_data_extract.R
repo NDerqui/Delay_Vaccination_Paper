@@ -388,9 +388,9 @@ var_hh_names <- c("urban", "city", "wealth",
                   "husband_edu", "husband_lit", "husband_ocu",
                   "total_kids")
 
-var_demo <- c("B1", "B2", "B4", "B5",
+var_demo <- c("B1", "B2", "B17", "B4", "B5",
               "B8", "B19", "H1", "BORD")
-var_demo_names <- c("dob_month", "dob_year", "sex", "alive",
+var_demo_names <- c("dob_month", "dob_year", "dob_day", "sex", "alive",
                     "age_y", "age_m", "health_card", "birth_order")
 
 var_vax <- c("H2", "H2Y", "H2M", "H2D",
