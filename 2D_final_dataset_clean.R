@@ -1331,7 +1331,7 @@ names(analysis_main)
 
 # Do a spec to perform a pivot_longer_spec
 
-spec <- data.frame(.name = sort(c(colnames(analysis_main)[142:341])),
+spec <- data.frame(.name = sort(c(colnames(analysis_main)[143:342])),
                    .value = c(rep("age_", times = 25), rep("buffer_", times = 25),
                               rep("cat_", times = 25), rep(c("date_"), times = 25),
                               rep(c("delay_"), times = 25), rep("intro_", times = 25),
@@ -1351,7 +1351,7 @@ nrow(analysis_main)/743694
 
 # Organise and clean (NOTE: eliminate 9 further unneeded cols)
 
-colnames(analysis_main)[142:150] <- c("vaccine", "age_at_vax", "t_buffer_rec_to_survey",
+colnames(analysis_main)[143:151] <- c("vaccine", "age_at_vax", "t_buffer_rec_to_survey",
                                       "cat_delay", "date_vax", "delay",
                                       "intro_vax", "introyear_vax", "rec_vax_age")
 
