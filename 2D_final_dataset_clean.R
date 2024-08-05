@@ -992,7 +992,7 @@ for (step in 1:2) {
   vaxdata <- vaxdata %>%
     select("phase", "year", "month", "iso3", "country", "who_region_code",
            "DHSID", "cluster", "hh", "id", "weight",
-           "alive", "sex", "dob_month", "dob_year", "age_m", "age_y",
+           "alive", "sex", "dob_month", "dob_year", "dob_day", "age_m", "age_y",
            "health_card", "total_kids", "birth_order",
            "urban", "city", "wealth",
            "mother_education", "mother_literacy", "married", "mother_occupation",
@@ -1026,15 +1026,17 @@ for (step in 1:2) {
   
   # DOB
   
-  # To create a date, use 15th of each month as approx - for both dates
+  # To create a date, use 15th of each month as approx when DOB-day is NA
   
   vaxdata <- vaxdata %>%
     mutate(dob_year = case_when(dob_year <= 10 ~ dob_year+2000,
                                 dob_year > 10 & dob_year < 1000 ~ dob_year+1900,
                                 dob_year >= 1000 & dob_year <= 2022 ~ dob_year,
                                 dob_year > 2022 ~ NA_real_)) %>%
+    mutate(dob_day = case_when(!is.na(dob_day) ~ dob_day,
+                               is.na(dob_day) ~ 15)) %>%
     mutate(dint = make_date(year, month, 15)) %>%
-    mutate(dob = make_date(dob_year, dob_month, 15))
+    mutate(dob = make_date(dob_year, dob_month, dob_day))
   
   # Date of interview and dob --> age of kids in months at interview
   
@@ -1356,7 +1358,7 @@ colnames(analysis_main)[142:150] <- c("vaccine", "age_at_vax", "t_buffer_rec_to_
 analysis_main <- analysis_main %>%
   select("phase", "year", "month", "iso3", "country", "who_region_code",
          "DHSID", "cluster", "hh", "id", "weight",
-         "alive", "sex", "dob_month", "dob_year", "age_m", "age_months", "age_y",
+         "alive", "sex", "dob_month", "dob_year", "dob_day", "age_m", "age_months", "age_y",
          "health_card", "total_kids", "birth_order",
          "urban", "city", "wealth",
          "mother_education", "mother_literacy", "married", "mother_occupation",
