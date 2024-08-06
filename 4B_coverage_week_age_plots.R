@@ -140,11 +140,11 @@ plot_data <- plot_data %>%
 plot_data$week <- as.numeric(parse_number(plot_data$week))
 
 plot_data <- plot_data %>%
+  select(country, vaccine, recomm_weeks, week, proportion, prop_group) %>%
   arrange(country, vaccine, week) %>%
   group_by(country, vaccine) %>%
   mutate(plot_order = rank(week)) %>%
-  ungroup() %>%
-  select(country, vaccine, proportion, prop_group, week, plot_order)
+  ungroup()
 
 ## Do plot in a loop
 
@@ -249,6 +249,18 @@ dev.off()
 
 data_subset <- plot_data %>% filter(country == "All")
 
+# Get the y-axis with each vaccine recomm
+
+new_labels <- data_subset %>%
+  group_by(vaccine) %>%
+  filter(row_number() == 1) %>%
+  ungroup() %>%
+  mutate(labels = paste0("(", recomm_weeks, " w)")) %>%
+  mutate(labels = case_when(labels == "(1 w)" ~ "(birth)",
+                            labels != "(1 w)" ~ labels)) %>%
+  mutate(labels = paste0(vaccine, " ", labels)) %>%
+  select(vaccine, labels)
+
 # Plot
 
 p <- ggplot(data = data_subset,
@@ -260,7 +272,8 @@ p <- ggplot(data = data_subset,
   scale_x_discrete(breaks = as.factor(seq(1:8)),
                    labels = c("WHO recomm", "2 we later", "4 we later", "6 we later",
                               "8 we later", "4 mo later", "6 mo later", "Final")) +
-  scale_y_discrete(limits = rev) +
+  scale_y_discrete(limits = rev,
+                   breaks = new_labels$vaccine, labels = new_labels$labels) +
   scale_color_manual(breaks = c("clear", "normal"),
                      values = c("white", "black")) +
   scale_fill_carto_c(palette = "Geyser", direction = -1, limits = c(0, 100),
@@ -302,6 +315,21 @@ data_subset <- plot_data %>% filter(country != "All")
 
 for (c in 1:length(countries)) {
   
+  # Get the y-axis with each vaccine recomm
+  
+  new_labels <- data_subset %>%
+    filter(country == countries[c]) %>%
+    group_by(vaccine) %>%
+    filter(row_number() == 1) %>%
+    ungroup() %>%
+    mutate(labels = paste0("(", recomm_weeks, " w)")) %>%
+    mutate(labels = case_when(labels == "(1 w)" ~ "(birth)",
+                              labels != "(1 w)" ~ labels)) %>%
+    mutate(labels = paste0(vaccine, " ", labels)) %>%
+    select(vaccine, labels)
+  
+  # Plot
+  
   p <- ggplot(data = filter(data_subset, country == countries[c]),
               mapping = aes(x = as.factor(plot_order),
                             y = vaccine)) +
@@ -311,7 +339,8 @@ for (c in 1:length(countries)) {
     scale_x_discrete(breaks = as.factor(seq(1:8)),
                      labels = c("Recomm. age", "2 we later", "4 we later", "6 we later",
                                 "8 we later", "4 mo later", "6 mo later", "Final")) +
-    scale_y_discrete(limits = rev) +
+    scale_y_discrete(limits = rev,
+                     breaks = new_labels$vaccine, labels = new_labels$labels) +
     scale_color_manual(breaks = c("clear", "normal"),
                        values = c("white", "black")) +
     scale_fill_carto_c(palette = "Geyser", direction = -1, limits = c(0, 100),
