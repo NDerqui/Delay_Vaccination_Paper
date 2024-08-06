@@ -292,11 +292,11 @@ p <- ggplot(data = data_subset,
         legend.position = "bottom")
 
 png(filename = paste0("Results_CoverageWeekAge/", buffer_folder, "/Figure1_AgeCoverage.png"),
-    width = 6, height = 10, units = "in", res = 1200)
+    width = 7, height = 10, units = "in", res = 1200)
 print(p)
 dev.off()
 pdf(file = paste0("Results_CoverageWeekAge/", buffer_folder, "/Figure1_AgeCoverage.pdf"),
-    width = 6, height = 10)
+    width = 7, height = 10)
 print(p)
 dev.off()
 
@@ -359,11 +359,11 @@ for (c in 1:length(countries)) {
           legend.position = "bottom")
   
   png(filename = paste0("Results_CoverageWeekAge/", buffer_folder, "/By_country_Figure1/", countries[c], "_Figure1_AgeCoverage.png"),
-      width = 6, height = 10, units = "in", res = 1200)
+      width = 7, height = 10, units = "in", res = 1200)
   print(p)
   dev.off()
   pdf(file = paste0("Results_CoverageWeekAge/", buffer_folder, "/By_country_Figure1/", countries[c], "_Figure1_AgeCoverage.pdf"),
-      width = 6, height = 10)
+      width = 7, height = 10)
   print(p)
   dev.off()
   
