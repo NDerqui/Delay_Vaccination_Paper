@@ -125,7 +125,7 @@ paper_plot1 <- ggplot(data = plot_delay,
   geom_vline(xintercept = 0, color = carto_pal(name = "Safe")[9], linetype = 2) +
   geom_density_ridges2(mapping = aes(fill = factor(vaccine, levels = vaccine_vars),
                                      linetype = factor(dose, levels = c("0", "1", "2", "3"))),
-                       bandwidth = 0.8, alpha = 0.40, scale = 1.25, size = 0.3) +
+                       bandwidth = 0.8, alpha = 0.40, scale = 1, size = 0.2) +
   scale_y_discrete(limits = rev) +
   scale_fill_manual(breaks = vaccine_vars, values = colors) +
   scale_linetype_manual(breaks = c("0", "1", "2", "3"), values = c(1, 1, 3, 5)) +
@@ -143,18 +143,18 @@ paper_plot1 <- ggplot(data = plot_delay,
         legend.title = element_blank(),
         legend.key.size = unit(0.3, "cm"),
         legend.position = "bottom") +
-  guides(fill = guide_legend(nrow = 2, byrow = TRUE,
+  guides(fill = guide_legend(nrow = 3, byrow = TRUE,
                              override.aes = list(linetype = override.linetype)),
          linetype = "none")
 
 # Saving in a couple of options
 
 png(filename = paste0("Results_DelayVaccination/", buffer_folder, "/Figure2_Delay_AllVaccines.png"),
-    height = 12, width = 9, units = "in", res = 1200)
+    height = 9, width = 7, units = "in", res = 1200)
 print(paper_plot1)
 dev.off()
 pdf(file = paste0("Results_DelayVaccination/", buffer_folder, "/Figure2_Delay_AllVaccines.pdf"),
-    height = 12, width = 9)
+    height = 9, width = 7)
 print(paper_plot1)
 dev.off()
 
@@ -259,7 +259,7 @@ for (c in 1:length(countries)) {
     geom_vline(xintercept = 0, color = carto_pal(name = "Safe")[9], linetype = 2) +
     geom_density_ridges2(mapping = aes(fill = factor(vaccine, levels = vaccine_vars),
                                        linetype = factor(dose, levels = c("0", "1", "2", "3"))),
-                         bandwidth = 0.8, alpha = 0.40, scale = 1.25, size = 0.3) +
+                         bandwidth = 0.8, alpha = 0.40, scale = 1, size = 0.2) +
     scale_y_discrete(limits = rev) +
     scale_fill_manual(breaks = vaccine_vars, values = colors) +
     scale_linetype_manual(breaks = c("0", "1", "2", "3"), values = c(1, 1, 3, 5)) +
@@ -277,17 +277,17 @@ for (c in 1:length(countries)) {
           legend.title = element_blank(),
           legend.key.size = unit(0.3, "cm"),
           legend.position = "bottom") +
-    guides(fill = guide_legend(nrow = 2, byrow = TRUE),
+    guides(fill = guide_legend(nrow = 3, byrow = TRUE),
            linetype = "none")
   
   # Saving in a couple of options
   
   png(filename = paste0("Results_DelayVaccination/", buffer_folder, "/By_country_Figure2/", countries[c], "_Figure2_Delay_AllVaccines.png"),
-      height = 12, width = 9, units = "in", res = 1200)
+      height = 9, width = 7, units = "in", res = 1200)
   print(paper_plot1)
   dev.off()
   pdf(file = paste0("Results_DelayVaccination/", buffer_folder, "/By_country_Figure2/", countries[c], "_Figure2_Delay_AllVaccines.pdf"),
-      height = 12, width = 9)
+      height = 9, width = 7)
   print(paper_plot1)
   dev.off()
 }
