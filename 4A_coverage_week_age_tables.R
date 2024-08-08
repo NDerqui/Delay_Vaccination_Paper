@@ -173,6 +173,11 @@ for (country in 1:length(countries)) {
   
   survival_result_country <- data.frame()
   
+  # Get the region
+  
+  who_region <- unique(analysis_main[["who_region_code"]][analysis_main[["country"]] == countries[country]])
+  who_region <- who_region[!is.na(who_region)]
+  
   # Loop through vaccines
   
   for (vaccine in 1:length(vaccines)) {
@@ -184,7 +189,7 @@ for (country in 1:length(countries)) {
     
     data_subset <- analysis_main[analysis_main[["vaccine"]] == vaccines[vaccine] & analysis_main[["t_buffer_rec_to_survey"]] >= buffer,]
     
-    # Subset to our birth cohort
+    # Subset to our country of interest
     
     data_subset <- data_subset[data_subset[["country"]] == countries[country],]
     
@@ -236,6 +241,7 @@ for (country in 1:length(countries)) {
     ## Put results with names
     
     survival_result_vaccine <- data.frame(country = countries[country],
+                                          who_region = who_region,
                                           vaccine = titles[vaccine],
                                           loop_result)
     

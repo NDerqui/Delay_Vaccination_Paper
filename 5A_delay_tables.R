@@ -256,6 +256,11 @@ for (country in 1:length(countries)) {
   
   delay_country <- data.frame()
   
+  # Get the region
+  
+  who_region <- unique(analysis_main[["who_region_code"]][analysis_main[["country"]] == countries[country]])
+  who_region <- who_region[!is.na(who_region)]
+  
   # Loop through vaccines
   
   for (vaccine in 1:length(vaccines)) {
@@ -311,6 +316,7 @@ for (country in 1:length(countries)) {
     ## Store results
     
     delay_vaccine <- data.frame(country =  countries[country],
+                                who_region = who_region,
                                 vaccine = titles[vaccine],
                                 median, iqr, mean, sd, range,
                                 quan_01, quan_05, quan_15, quan_25, quan_50,
