@@ -219,8 +219,8 @@ plot_list1 <- c(plot_list[1], plot, plot, plot, plot_list[c(2:4)], plot,
                 plot_list[c(5:11)])
 paper_plot2a <- ggarrange(plotlist = plot_list1, common.legend = TRUE, align = "hv", legend = "bottom")
 
-plot_list2 <- c(plot_list[c(12)], plot, plot_list[c(14:15)], plot_list[(16:19)],
-                plot_list[(20:22)], plot, plot_list[c(23:25)], plot)
+plot_list2 <- c(plot_list[c(12)], plot, plot_list[c(13:14)], plot_list[(15:18)],
+                plot_list[(19:21)], plot, plot_list[c(22:24)], plot)
 paper_plot2b <- ggarrange(plotlist = plot_list2, common.legend = TRUE, align = "hv", legend = "bottom")
 
 # Saving in a couple of options
