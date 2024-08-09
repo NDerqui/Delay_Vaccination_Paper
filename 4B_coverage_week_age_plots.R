@@ -46,6 +46,7 @@ result_all <- read.csv(file = paste0("Results_CoverageWeekAge/", buffer_folder, 
 
 result_country <- read.csv(file = paste0("Results_CoverageWeekAge/", buffer_folder, "/Tables/Country_cum_vaccination.csv"))
 
+result_country <- result_country %>% select(-who_region) # Don't need for plots
 
 #### Variables ####
 
