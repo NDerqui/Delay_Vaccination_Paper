@@ -16,6 +16,7 @@ library(tidyverse)
 library(readr)       # parse_number
 library(rcartocolor)
 library(patchwork)
+library(ggpubr)
 
 
 
@@ -243,6 +244,92 @@ pdf(file = paste0("Results_CoverageWeekAge/", buffer_folder, "/SuppFigure4c_AgeC
 print(paper_plot3)
 dev.off()
 
+## For the paper
+
+plot_list <- list()
+
+for (v in 1:length(vaccine_vars)) {
+  
+  message(v)
+  
+  # Create a mini-data subset for each vaccine
+  
+  data_subset <- plot_data %>%
+    filter(vaccine == vaccine_vars[v])
+  
+  # Plot and save
+  
+  plot_list[[v]] <- local({
+    
+    v <- v
+    
+    ggplot(data = data_subset,
+           mapping = aes(x = as.factor(plot_order), y = country)) +
+      geom_tile(mapping = aes(fill = proportion), color = "white") +
+      geom_text(mapping = aes(label = proportion, color = prop_group),
+                size = 1) +
+      scale_x_discrete(labels = c("Recomm. age", "2 w later", "4 w later", "6 w later",
+                                  "8 w later", "4 m later", "6 m later", "Final")) +
+      scale_y_discrete(limits = rev) +
+      scale_color_manual(breaks = c("clear", "normal"),
+                         values = c("white", "black")) +
+      scale_fill_carto_c(palette = "Geyser", direction = -1, limits = c(0, 100),
+                         name = "Coverage per week of age") +
+      guides(color = "none",
+             x =  guide_axis(angle = 45)) +
+      coord_fixed() +
+      labs(title = paste0(vaccine_vars[v])) +
+      theme(plot.title = element_text(face = "bold", size = rel(0.5)),
+            axis.title = element_blank(),
+            axis.text.y = element_text(size = rel(0.6)),
+            axis.text.x = element_text(size = rel(0.5)),
+            legend.text = element_text(size = rel(0.6)),
+            legend.title = element_text(size = rel(0.6), face = "bold"),
+            legend.key.height = unit(0.4,"line"),
+            legend.key.width = unit(5, "line"),
+            legend.spacing.x = unit(1.0, 'cm')) +
+      if(vaccine_vars[v] == "BCG" | vaccine_vars[v] == "Hib-D1" | vaccine_vars[v] == "OPV-D2"){
+        theme()
+      } else {
+        theme(axis.text.y = element_blank())
+      }
+  })
+  
+  
+}
+
+# Clean the space
+
+rm(v, data_subset)
+
+# Combining
+
+title <- ggplot() + theme_minimal() +
+  labs(title = "Figure S4: Vaccination coverage per week of age for each country") +
+  theme(plot.title = element_text(face = "bold", size = rel(0.8)))
+
+paper_plot1 <- wrap_plots(plot_list[1:8], nrow = 1) + plot_layout(guides = "collect") & theme(legend.position = "bottom")
+paper_plot1 <- wrap_plots(title, paper_plot1, ncol = 1, heights = c(0.001, 1), widths = c(0.005, 1))
+
+paper_plot2 <- wrap_plots(plot_list[9:16], nrow = 1) + plot_layout(guides = "collect") & theme(legend.position = "bottom")
+paper_plot2 <- wrap_plots(title, paper_plot2, ncol = 1, heights = c(0.001, 1), widths = c(0.005, 1))
+
+paper_plot3 <- wrap_plots(plot_list[17:24], nrow = 1) + plot_layout(guides = "collect") & theme(legend.position = "bottom")
+paper_plot3 <- wrap_plots(title, paper_plot3, ncol = 1, heights = c(0.001, 1), widths = c(0.005, 1))
+
+tiff(filename = paste0("Results_CoverageWeekAge/", buffer_folder, "/SuppFigure4a_AgeCoverage1.tiff"),
+     width = 8.75, height = 7, units = "in", res = 600, compression = "lzw")
+print(paper_plot1)
+dev.off()
+tiff(filename = paste0("Results_CoverageWeekAge/", buffer_folder, "/SuppFigure4b_AgeCoverage2.tiff"),
+     width = 8.75, height = 7, units = "in", res = 600, compression = "lzw")
+print(paper_plot2)
+dev.off()
+tiff(filename = paste0("Results_CoverageWeekAge/", buffer_folder, "/SuppFigure4c_AgeCoverage3.tiff"),
+     width = 8.75, height = 7, units = "in", res = 600, compression = "lzw")
+print(paper_plot3)
+dev.off()
+
 
 #### Age-coverage ####
 
@@ -298,6 +385,11 @@ print(p)
 dev.off()
 pdf(file = paste0("Results_CoverageWeekAge/", buffer_folder, "/Figure1_AgeCoverage.pdf"),
     width = 7, height = 10)
+print(p)
+dev.off()
+
+tiff(filename = paste0("Results_CoverageWeekAge/", buffer_folder, "/Figure1_AgeCoverage.tiff"),
+    width = 6.25, height = 8.75, units = "in", res = 600, compression = "lzw")
 print(p)
 dev.off()
 

@@ -360,3 +360,50 @@ pdf(paste0("Results_SurvivalAnalysis/", buffer_folder, "/SuppFigure5_RiskFactors
     width = 18, height = 7)
 wrap_plots(plot_list[c(1, 5, 6)])
 dev.off()
+
+## For the paper
+
+plot_list <- list()
+
+for (i in 1:length(risk_ids)) {
+  
+  p <- ggplot(data = filter(all_results, var == risk_ids[i]),
+              aes(x = hr, y = factor(vaccine, order))) +
+    geom_linerange(aes(xmin = as.numeric(ci_low), xmax = as.numeric(ci_upp),
+                       color = char)) +
+    geom_point(aes(color = char), shape = 15, size = 1) +
+    scale_y_discrete(limits = rev) +
+    scale_color_manual(breaks = risk_names[[i]],
+                       values = carto_pal(name = "Safe")) +
+    labs(title = paste0(risk_ids[i]), x = "Hazard Ratio (95% CI)") +
+    theme_bw() +
+    theme(plot.title = element_text(face = "bold", size = rel(0.5)),
+          axis.title.y = element_blank(),
+          axis.title.x = element_text(size = rel(0.4)),
+          axis.text = element_text(size = rel(0.4)),
+          legend.title = element_blank(),
+          legend.text = element_text(size = rel(0.4)),
+          legend.position = "bottom", legend.spacing.x = unit(0.1, "cm")) +
+    if (i %in% c(1,5,6)) {
+    guides(color = guide_legend(nrow = 2, byrow = TRUE)) } else
+    {guides(color = guide_legend(nrow = 1, byrow = TRUE))}
+  
+  
+  plot_list[[i]] <- p
+}
+
+rm(i, p)
+
+tiff(paste0("Results_SurvivalAnalysis/", buffer_folder, "/Figure4_RiskFactors_HR.tiff"),
+     width = 8.75, height = 3.8, res = 600, units = "in", compression = "lzw")
+wrap_plots(plot_list[c(2, 3, 4)])
+dev.off()
+
+p <- ggarrange(plotlist = plot_list[c(1, 5, 6)], nrow = 1)
+
+tiff(paste0("Results_SurvivalAnalysis/", buffer_folder, "/SuppFigure5_RiskFactors_HR.tiff"),
+    width = 8.75, height = 3.8, res = 600, units = "in", compression = "lzw")
+annotate_figure(p = p,
+                top = text_grob("Figure S5: Multivariate analysis of demographic and socioeconomic indicators associated with vaccination delay.",
+                                face = "bold", size = 6))
+dev.off()

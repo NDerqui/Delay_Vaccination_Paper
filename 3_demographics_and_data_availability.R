@@ -828,6 +828,37 @@ pdf("Demographics/SuppFigure1_AgeReccommendations.pdf",
 p
 dev.off()
 
+tiff("Demographics/SuppFigure1_AgeReccommendations.tiff",
+     res = 600, units = "in", height = 7, width = 8.75, compression = "lzw")
+ggplot(data = recomm,
+       mapping = aes(y = country)) +
+  geom_segment(aes(yend = country, x = 0, xend = diff), linewidth = 0.2) +
+  geom_vline(aes(xintercept = 0), color = "black", linewidth = 0.2) +
+  geom_point(aes(x = diff, fill = as.factor(binary),
+                 color = as.factor(binary)), pch = 21, size = 0.7) +
+  scale_x_continuous(trans = "asinh",
+                     breaks=c(-15,-2,0,2,7,20,80),
+                     name = "Weeks of difference between each country's vaccination age recommendation and WHO's age recommendation") +
+  scale_y_discrete(limits = rev) +
+  scale_fill_manual(breaks = c("-1", "0", "1"),
+                    values = c(carto_pal(name = "Safe")[7], "white",
+                               carto_pal(name = "Safe")[9])) +
+  scale_color_manual(breaks = c("-1", "0", "1"),
+                     values = c(carto_pal(name = "Safe")[7], "black",
+                                carto_pal(name = "Safe")[9])) +
+  labs(title = "Figure S1: Recommended age of vaccination for each vaccine and dose in each country") +
+  theme_bw() +
+  theme(plot.title = element_text(face = "bold", size = rel(0.7)),
+        axis.title.y = element_blank(), axis.title.x = element_text(size = rel(0.65)),
+        axis.text.y = element_text(size = rel(0.65)),
+        axis.text.x = element_text(angle = 90, size = rel(0.35)),
+        axis.ticks = element_line(size = rel(0.5)),
+        strip.text.x.top = element_text(angle = 30, size = rel(0.55)),
+        strip.background = element_blank()) +
+  guides(fill = "none", color = "none") +
+  facet_grid(. ~ vaccine)
+dev.off()
+
 
 #### Map ####
 
@@ -892,6 +923,27 @@ dev.off()
 png("Demographics/SuppFigure2_MapPropChildren.png",
     res = 1200, units = "in", height = 8, width = 14)
 p
+dev.off()
+tiff("Demographics/SuppFigure2_MapPropChildren.tiff",
+    res = 600, units = "in", height = 5, width = 8.75, compression = "lzw")
+ggplot() +
+  geom_sf(data = world) +
+  geom_sf(data = map, aes(fill = (prop), geometry = geometry)) +
+  scale_fill_gradient(low = carto_pal(name = "Safe")[1],
+                      high = carto_pal(name = "Safe")[5],
+                      trans = log10_trans(),
+                      breaks = trans_breaks("log10", function(x) 10^x),
+                      labels = paste0(c(0.001, 0.01, 0.03, 0.10, 0.3)*100, "%"),
+                      name = "Percentage") +
+  labs(title = "Figure S2: Percentage of children from each country among all included in the analyses") +
+  theme_bw() +
+  theme(plot.title = element_text(face = "bold", size = rel(0.7)),
+        legend.title = element_text(size = rel(0.6)),
+        legend.text = element_text(size = rel(0.5)),
+        legend.position = "bottom",
+        legend.key.height = unit(0.4,"line"),
+        legend.key.width = unit(3, "line"),
+        legend.spacing.x = unit(1.0, 'cm'))
 dev.off()
 
 
@@ -1222,3 +1274,69 @@ pdf(file = "Demographics/SuppFigure3_ComparablePop.pdf",
 ggarrange(p, p2, ncol = 1, common.legend = TRUE, legend = "bottom", labels = c("A", "B"))
 dev.off()
 
+## For the paper
+
+# For all the data, vaccine availability
+
+plot <- sensi_vax %>%
+  mutate(combi = paste0(Characteristic, " - ", Levels))
+
+order <- unique(plot$combi)
+
+p <- ggplot(data = plot, mapping = aes(x = `Vaccination Data Available (%)`,
+                                       y = `Vaccination Data Not Available (%)`)) +
+  geom_point(mapping = aes(color = combi)) +
+  geom_abline(slope = 1, intercept = 0, color = "darkgrey") +
+  scale_color_manual(breaks = order,
+                     values = c(rep(carto_pal(name = "Safe")[1], times = 2),
+                                rep(carto_pal(name = "Safe")[10], times = 5),
+                                rep(carto_pal(name = "Safe")[3], times = 2),
+                                rep(carto_pal(name = "Safe")[8], times = 3),
+                                rep(carto_pal(name = "Emrld")[3], times = 5),
+                                rep(carto_pal(name = "Safe")[7], times = 4),
+                                rep(carto_pal(name = "Peach")[1], times = 3),
+                                rep(carto_pal(name = "Safe")[7], times = 1),
+                                rep("lightgrey", times = 5))) +
+  theme_bw() +
+  theme(axis.title = element_text(size = rel(0.65)),
+        axis.text = element_text(size = rel(0.65)),
+        legend.title = element_blank(),
+        legend.text = element_text(size = rel(0.55)),
+        legend.position = "bottom")
+
+# For all the data, date availability
+
+plot <- sensi_dat %>%
+  mutate(combi = paste0(Characteristic, " - ", Levels))
+
+order <- unique(plot$combi)
+
+p2 <- ggplot(data = plot, mapping = aes(x = `Vaccination Age Available (%)`,
+                                        y = `Vaccination Age Not Available (%)`)) +
+  geom_point(mapping = aes(color = combi)) +
+  geom_abline(slope = 1, intercept = 0, color = "darkgrey") +
+  scale_color_manual(breaks = order,
+                     values = c(rep(carto_pal(name = "Safe")[1], times = 2),
+                                rep(carto_pal(name = "Safe")[10], times = 5),
+                                rep(carto_pal(name = "Safe")[3], times = 2),
+                                rep(carto_pal(name = "Safe")[8], times = 3),
+                                rep(carto_pal(name = "Emrld")[3], times = 5),
+                                rep(carto_pal(name = "Safe")[7], times = 4),
+                                rep(carto_pal(name = "Peach")[1], times = 3),
+                                rep(carto_pal(name = "Safe")[7], times = 1),
+                                rep("lightgrey", times = 5))) +
+  theme_bw() +
+  theme(axis.title = element_text(size = rel(0.65)),
+        axis.text = element_text(size = rel(0.65)),
+        legend.title = element_blank(),
+        legend.text = element_text(size = rel(0.55)),
+        legend.position = "bottom")
+
+p <- ggarrange(p, p2, ncol = 1, common.legend = TRUE, legend = "bottom", labels = c("A", "B"))
+
+tiff(filename = "Demographics/SuppFigure3_ComparablePop.tiff",
+    height = 8.75, width = 7.3, units = "in", res = 600, compression = "lzw")
+annotate_figure(p = p,
+                top = text_grob("Figure S3: Demographic and socioeconomic characteristics of children with and without (A) vaccination data or (B) vaccination age data",
+                                face = "bold", size = 8))
+dev.off()

@@ -138,7 +138,7 @@ paper_plot1 <- ggplot(data = plot_delay,
         axis.title.x = element_text(size = rel(1.2)),
         axis.text.x = element_text(size = rel(1.2)),
         axis.title.y = element_blank(),
-        axis.text.y = element_text(angle = 90, size = rel(1.5), hjust = 0),
+        axis.text.y = element_text(angle = 90, size = rel(1.4), hjust = 0),
         axis.ticks.y = element_blank(),
         legend.title = element_blank(),
         legend.key.size = unit(0.3, "cm"),
@@ -155,6 +155,11 @@ print(paper_plot1)
 dev.off()
 pdf(file = paste0("Results_DelayVaccination/", buffer_folder, "/Figure2_Delay_AllVaccines.pdf"),
     height = 9, width = 7)
+print(paper_plot1)
+dev.off()
+
+tiff(filename = paste0("Results_DelayVaccination/", buffer_folder, "/Figure2_Delay_AllVaccines.tiff"),
+    height = 8.75, width = 6.8, units = "in", res = 600, compression = "lzw")
 print(paper_plot1)
 dev.off()
 
@@ -243,7 +248,71 @@ pdf(file = paste0("Results_DelayVaccination/", buffer_folder, "/Figure3b_Delay_R
 print(paper_plot2b)
 dev.off()
 
+## For the paper
+
+plot_list <- list()
+
+for (v in 1:length(vaccine_vars)) {
   
+  plot_ribbon <- plot_birth %>%
+    filter(vaccine == vaccine_vars[v])
+  
+  colors_plot <- c(MixColor(colors[v], "white", 0.25),
+                   MixColor(colors[v], "white", 0.50),
+                   MixColor(colors[v], "white", 0.75),
+                   MixColor(colors[v], "white", 0.95))
+  
+  p <- ggplot(data = plot_ribbon, mapping = aes(x = birth_cohort, y = median)) +
+    geom_hline(yintercept = 0, color = carto_pal(name = "Safe")[9], linetype = 2) +
+    geom_ribbon(mapping = aes(ymin = quan_01, ymax = quan_99, fill = "p99"), alpha = 0.6) +
+    geom_ribbon(mapping = aes(ymin = quan_05, ymax = quan_95, fill = "p95"), alpha = 0.6) +
+    geom_ribbon(mapping = aes(ymin = quan_15, ymax = quan_85, fill = "p85"), alpha = 0.6) +
+    geom_ribbon(mapping = aes(ymin = quan_25, ymax = quan_75, fill = "iqr"), alpha = 0.6) +
+    geom_line(mapping = aes(y = median, linetype = "median")) +
+    geom_line(mapping = aes(y = mean, linetype = "mean")) +
+    scale_fill_manual(breaks = c("p99", "p95", "p85", "iqr"),
+                      values = colors_plot,
+                      labels = c("1% - 99% p", "5% - 95% p", "15% - 85% p", "25% - 75% p")) +
+    scale_linetype_manual(breaks = c("median", "mean"),
+                          values = c("solid", "dashed"),
+                          labels = c("Median", "Mean")) +
+    coord_cartesian(ylim = c(-5, 20)) +
+    labs(title = paste0(vaccine_vars[v]),
+         x = "Birth cohort", y = "Vaccination delay (weeks)") +
+    theme_bw() +
+    theme(plot.title = element_text(face = "bold", size = rel(0.8)),
+          axis.title = element_text(size = rel(0.7)),
+          axis.text = element_text(size = rel(0.7)),
+          legend.position = "bottom",
+          legend.title = element_blank(),
+          legend.text = element_text(size = rel(0.7)))
+  
+  plot_list[[v]] <- p
+}
+
+rm(p, v)
+
+plot <- list(ggplot() + theme_minimal())
+
+plot_list1 <- c(plot_list[1], plot, plot, plot, plot_list[c(2:4)], plot,
+                plot_list[c(5:11)])
+paper_plot2a <- ggarrange(plotlist = plot_list1, common.legend = TRUE, align = "hv", legend = "bottom")
+
+tiff(filename = paste0("Results_DelayVaccination/", buffer_folder, "/Figure3a_Delay_Ribbon.tiff"),
+     height = 7, width = 8.75, units = "in", res = 600, compression = "lzw")
+print(paper_plot2a)
+dev.off()
+
+plot_list2 <- c(plot_list[c(12)], plot, plot_list[c(13:14)], plot_list[(15:18)],
+                plot_list[(19:21)], plot, plot_list[c(22:24)], plot)
+paper_plot2b <- ggarrange(plotlist = plot_list2, common.legend = TRUE, align = "hv", legend = "bottom")
+
+tiff(filename = paste0("Results_DelayVaccination/", buffer_folder, "/Figure3b_Delay_Ribbon.tiff"),
+     height = 7, width = 8.75, units = "in", res = 600, compression = "lzw")
+print(paper_plot2b)
+dev.off()
+  
+
 #### Extra ####
   
 # Store results
