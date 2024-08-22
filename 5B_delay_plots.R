@@ -129,7 +129,7 @@ paper_plot1 <- ggplot(data = plot_delay,
   scale_y_discrete(limits = rev) +
   scale_fill_manual(breaks = vaccine_vars, values = colors) +
   scale_linetype_manual(breaks = c("0", "1", "2", "3"), values = c(1, 1, 3, 5)) +
-  scale_x_continuous(limits = c(-25, 50)) +
+  scale_x_continuous(limits = c(-12, 25)) +
   labs(x = "Delay (weeks)",
        color = "Vaccine", fill = "Vaccine", linetype = "Vaccine") +
   theme_bw() +
@@ -138,7 +138,7 @@ paper_plot1 <- ggplot(data = plot_delay,
         axis.title.x = element_text(size = rel(1.2)),
         axis.text.x = element_text(size = rel(1.2)),
         axis.title.y = element_blank(),
-        axis.text.y = element_text(angle = 90, size = rel(1.4), hjust = 0),
+        axis.text.y = element_text(angle = 90, size = rel(1.2), hjust = 0),
         axis.ticks.y = element_blank(),
         legend.title = element_blank(),
         legend.key.size = unit(0.3, "cm"),
