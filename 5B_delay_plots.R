@@ -311,7 +311,7 @@ tiff(filename = paste0("Results_DelayVaccination/", buffer_folder, "/Figure3b_De
      height = 7, width = 8.75, units = "in", res = 600, compression = "lzw")
 print(paper_plot2b)
 dev.off()
-  
+
 
 #### Extra ####
   

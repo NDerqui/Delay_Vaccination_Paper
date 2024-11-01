@@ -404,6 +404,6 @@ p <- ggarrange(plotlist = plot_list[c(1, 5, 6)], nrow = 1)
 tiff(paste0("Results_SurvivalAnalysis/", buffer_folder, "/SuppFigure5_RiskFactors_HR.tiff"),
     width = 8.75, height = 3.8, res = 600, units = "in", compression = "lzw")
 annotate_figure(p = p,
-                top = text_grob("Figure S5: Multivariate analysis of demographic and socioeconomic indicators associated with vaccination delay.",
+                top = text_grob("Figure S7: Multivariate analysis of demographic and socioeconomic indicators associated with vaccination delay.",
                                 face = "bold", size = 6))
 dev.off()

@@ -304,18 +304,24 @@ rm(v, data_subset)
 
 # Combining
 
-title <- ggplot() + theme_minimal() +
+title4 <- ggplot() + theme_minimal() +
   labs(title = "Figure S4: Vaccination coverage per week of age for each country") +
+  theme(plot.title = element_text(face = "bold", size = rel(0.8)))
+title5 <- ggplot() + theme_minimal() +
+  labs(title = "Figure S5: Vaccination coverage per week of age for each country") +
+  theme(plot.title = element_text(face = "bold", size = rel(0.8)))
+title6 <- ggplot() + theme_minimal() +
+  labs(title = "Figure S6: Vaccination coverage per week of age for each country") +
   theme(plot.title = element_text(face = "bold", size = rel(0.8)))
 
 paper_plot1 <- wrap_plots(plot_list[1:8], nrow = 1) + plot_layout(guides = "collect") & theme(legend.position = "bottom")
-paper_plot1 <- wrap_plots(title, paper_plot1, ncol = 1, heights = c(0.001, 1), widths = c(0.005, 1))
+paper_plot1 <- wrap_plots(title4, paper_plot1, ncol = 1, heights = c(0.001, 1), widths = c(0.005, 1))
 
 paper_plot2 <- wrap_plots(plot_list[9:16], nrow = 1) + plot_layout(guides = "collect") & theme(legend.position = "bottom")
-paper_plot2 <- wrap_plots(title, paper_plot2, ncol = 1, heights = c(0.001, 1), widths = c(0.005, 1))
+paper_plot2 <- wrap_plots(title5, paper_plot2, ncol = 1, heights = c(0.001, 1), widths = c(0.005, 1))
 
 paper_plot3 <- wrap_plots(plot_list[17:24], nrow = 1) + plot_layout(guides = "collect") & theme(legend.position = "bottom")
-paper_plot3 <- wrap_plots(title, paper_plot3, ncol = 1, heights = c(0.001, 1), widths = c(0.005, 1))
+paper_plot3 <- wrap_plots(title6, paper_plot3, ncol = 1, heights = c(0.001, 1), widths = c(0.005, 1))
 
 tiff(filename = paste0("Results_CoverageWeekAge/", buffer_folder, "/SuppFigure4a_AgeCoverage1.tiff"),
      width = 8.75, height = 7, units = "in", res = 600, compression = "lzw")
