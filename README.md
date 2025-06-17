@@ -1,6 +1,6 @@
 # Timing of 24 childhood immunisations: analysis of DHS data from 54 countries
 
-This repository contains the code for data clenaing, analysis and figures generation used for the paper "Timeliness of 24 childhood immunisations and evolution of vaccination delay: analysis of data from 54 low- and middle-income countries" (Derqui *et al.*, 2024, [PLOS Global Public Health](https://journals.plos.org/globalpublichealth/article?id=10.1371/journal.pgph.0003749)).
+This repository contains the code for data cleaning, analysis and figures generation used for the paper "Timeliness of 24 childhood immunisations and evolution of vaccination delay: analysis of data from 54 low- and middle-income countries" (Derqui *et al.*, 2024, [PLOS Global Public Health](https://journals.plos.org/globalpublichealth/article?id=10.1371/journal.pgph.0003749)).
 
 ## Abstract
 
